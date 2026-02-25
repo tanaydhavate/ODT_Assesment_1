@@ -1,0 +1,70 @@
+from machine import Pin, TouchPad
+import time
+import neopixel
+
+dhruv = Pin(15, Pin.IN, Pin.PULL_UP)
+KATSEYE = TouchPad(Pin(32))
+jadoo = neopixel.NeoPixel(Pin(12), 16)
+butt = Pin(14, Pin.IN, Pin.PULL_UP)
+
+while True:
+    t_val = KATSEYE.read()
+    dhruv_touch = dhruv.value()
+
+    time.sleep(0.2)
+
+    if dhruv_touch == 0:
+        for i in range(16):      
+            jadoo[i] = (255, 0, 0)   
+        jadoo.write()
+        print("Pokemon found!")
+        time.sleep(0.3)
+    else:
+        for i in range(16):
+            jadoo[i] = (0, 0, 0)
+        jadoo.write()
+
+    if dhruv_touch == 0:
+        print("Pokmeon Detected")
+        time.sleep(0.3)
+    
+    if butt.value() == 0:
+        for i in range(16):
+            for p in range(16):
+                jadoo[p] = (0, 0, 0)
+                jadoo[i] = (0, 255, 0)
+                jadoo.write()
+                time.sleep(0.02)
+    
+    for p in range(16):
+        jadoo[p] = (0, 0, 0)
+    jadoo.write()
+
+    
+    for p in range(16):
+        jadoo[p] = (0, 0, 0)
+    jadoo.write()
+       
+    if 600 <= t_val <= 665:
+        print("Bulbasaur!")
+        for p in range(8):
+            jadoo[p] = (0, 150, 0)      
+        for p in range(8, 16):
+            jadoo[p] = (150, 0, 150)   
+        jadoo.write()
+        time.sleep(0.3)
+
+        
+    elif 400 <= t_val <= 500:
+        print("Charmander!")
+        for p in range(16):
+            jadoo[p] = (100, 20, 0)   
+        jadoo.write()
+        time.sleep(0.3)
+        
+    elif 1 <= t_val <= 200:
+        print("Squirtle!")
+        for p in range(16):
+            jadoo[p] = (0, 80, 200)    
+        jadoo.write()
+        time.sleep(0.3)
