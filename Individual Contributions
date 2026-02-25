@@ -1,0 +1,42 @@
+Individual Contribution
+
+1. Placed and connected physical hardware
+2. Assisted in code logic creation 
+3. Made 2 of the physical models 
+4. Edited and filmed final video
+5.Coded pokemon detection and scanning animations
+
+
+while True:
+    t_val = KATSEYE.read()
+    dhruv_touch = dhruv.value()
+
+    time.sleep(0.2)
+
+    if dhruv_touch == 0:
+        for i in range(16):      
+            jadoo[i] = (255, 0, 0)   
+        jadoo.write()
+        print("Pokemon found!")
+        time.sleep(0.3)
+    else:
+        for i in range(16):
+            jadoo[i] = (0, 0, 0)
+        jadoo.write()
+
+    if dhruv_touch == 0:
+        print("Pokmeon Detected")
+        time.sleep(0.3)
+    
+    if butt.value() == 0:
+        for i in range(16):
+            for p in range(16):
+                jadoo[p] = (0, 0, 0)
+                jadoo[i] = (0, 255, 0)
+                jadoo.write()
+                time.sleep(0.02)
+
+
+
+
+
