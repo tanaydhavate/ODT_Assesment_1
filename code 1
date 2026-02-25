@@ -1,0 +1,125 @@
+from machine import Pin, TouchPad
+import time
+import neopixel
+
+dhruv = Pin(15, Pin.IN, Pin.PULL_UP)
+KATSEYE = TouchPad(Pin(32))
+jadoo = neopixel.NeoPixel(Pin(12), 16)
+butt = Pin(14, Pin.IN, Pin.PULL_UP)     
+butter = Pin(21, Pin.IN, Pin.PULL_UP)  
+pooper= Pin(23, Pin.IN, Pin.PULL_UP)  
+
+bulbasaurno = 0
+charmanderno = 0
+squirtleno = 0
+game_khatam = 0
+ansh = 0
+pokemon = 0
+
+while True:
+    
+   
+  
+          
+    if butt.value() == 0:
+        if ansh:
+            ansh = False
+            print("Pokedex: OFF")
+        else:
+            ansh = True
+            print("Pokedex: ON")
+        for p in range(16): jadoo[p] = (0,0,0)
+        jadoo.write()
+        time.sleep(0.3)
+     
+    if butter.value() == 0:
+        bulbasaurno = charmanderno = squirtleno = 0
+        game_khatam = 0
+        print("Reset!")
+        for p in range(16):
+            jadoo[p] = (0,0,0)
+        jadoo.write()
+        time.sleep(0.5)
+    
+    if pooper.value() == 0:
+        for i in range(16):
+            for p in range(16):
+                jadoo[p] = (0, 0, 0)
+                jadoo[i] = (0, 255, 0)
+                jadoo.write()
+                time.sleep(0.02)
+
+   
+    if not ansh:
+        for p in range(16): jadoo[p] = (0,0,0)
+        jadoo.write()
+        time.sleep(0.2)
+    else:
+       
+        if game_khatam:
+            tricolour = [(255,0,0), (0,255,0), (0,0,255)]
+            for c in range(3):
+                for p in range(16): jadoo[p] = tricolour[c]
+                jadoo.write()
+                time.sleep(0.3)
+            for p in range(16): jadoo[p] = (0,0,0)
+            jadoo.write()
+            time.sleep(0.1)
+        else:
+            
+            t_val = KATSEYE.read()
+            dhruv_touch = dhruv.value()
+            time.sleep(0.2)
+
+            if dhruv_touch == 0:
+                for i in range(16): jadoo[i] = (255,0,0)
+                jadoo.write()
+                print("Pokemon found!")
+                time.sleep(0.3)
+            else:
+                for i in range(16): jadoo[i] = (0,0,0)
+                jadoo.write()
+
+           
+            detected = None
+            if 600 <= t_val <= 665:
+                print("Bulbasaur!")
+                for p in range(8): jadoo[p] = (0,150,0)
+                for p in range(8,16): jadoo[p] = (150,0,150)
+                jadoo.write()
+                detected = "bulbasaur"
+            elif 400 <= t_val <= 500:
+                print("Charmander!")
+                for p in range(16):
+                    jadoo[p] = (100,20,0)
+                jadoo.write()
+                detected = "charmander"
+            elif 1 <= t_val <= 200:
+                print("Squirtle!")
+                for p in range(16):
+                    jadoo[p] = (0,80,200)
+                jadoo.write()
+                detected = "squirtle"
+            
+            time.sleep(0.3)
+            pokemon_detected = detected
+            
+            if pokemon_detected:
+                if pokemon_detected == "bulbasaur":
+                    bulbasaurno += 1
+                    print("B:", bulbasaurno)
+                elif pokemon_detected == "charmander":
+                    charmanderno += 1
+                    print("C:", charmanderno)
+                elif pokemon_detected == "squirtle":
+                    squirtleno += 1
+                    print("S:", squirtleno)
+                
+                if bulbasaurno and charmanderno and squirtleno:
+                    game_khatam = True
+                    print("Caught em all!")
+
+            for p in range(16): jadoo[p] = (0,0,0)
+            jadoo.write()
+
+    time.sleep(0.05)
